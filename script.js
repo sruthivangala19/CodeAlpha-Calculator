@@ -1,93 +1,213 @@
-const items = [...document.querySelectorAll(".gallery-item")];
-const filterButtons = document.querySelectorAll(".filters button");
+const result = document.getElementById("result");
+const expression = document.getElementById("expression");
 
-const lightbox = document.getElementById("lightbox");
-const lightboxImg = document.getElementById("lightbox-img");
+const buttons = document.querySelectorAll("button");
 
-const closeBtn = document.getElementById("close");
-const nextBtn = document.getElementById("next");
-const prevBtn = document.getElementById("prev");
+let currentInput = "0";
+let previousInput = "";
+let operator = null;
+let waitingForOperand = false;
 
-let visibleItems = [...items];
-let currentIndex = 0;
+// Update calculator display
+function updateDisplay() {
+    result.value = currentInput;
+}
 
-// Open image
-items.forEach((item) => {
-    item.addEventListener("click", () => {
-        visibleItems = items.filter(
-            img => img.style.display !== "none"
+// Enter numbers
+function enterNumber(number) {
+    if (waitingForOperand) {
+        currentInput = number;
+        waitingForOperand = false;
+    } else {
+        currentInput =
+            currentInput === "0" ? number : currentInput + number;
+    }
+
+    updateDisplay();
+}
+
+// Enter decimal
+function enterDecimal() {
+    if (waitingForOperand) {
+        currentInput = "0.";
+        waitingForOperand = false;
+    } else if (!currentInput.includes(".")) {
+        currentInput += ".";
+    }
+
+    updateDisplay();
+}
+
+// Calculate result
+function calculate(a, b, op) {
+    switch (op) {
+        case "+":
+            return a + b;
+
+        case "-":
+            return a - b;
+
+        case "*":
+            return a * b;
+
+        case "/":
+            return b === 0 ? "Error" : a / b;
+
+        case "%":
+            return a % b;
+
+        default:
+            return b;
+    }
+}
+
+// Select operator
+function chooseOperator(nextOperator) {
+    const inputValue = parseFloat(currentInput);
+
+    if (operator && !waitingForOperand) {
+        const resultValue = calculate(
+            parseFloat(previousInput),
+            inputValue,
+            operator
         );
 
-        currentIndex = visibleItems.indexOf(item);
-        showImage();
-        lightbox.classList.add("show");
+        if (resultValue === "Error") {
+            currentInput = "Error";
+            operator = null;
+            updateDisplay();
+            return;
+        }
+
+        currentInput = String(Number(resultValue.toFixed(10)));
+        updateDisplay();
+    }
+
+    previousInput = currentInput;
+    operator = nextOperator;
+    waitingForOperand = true;
+
+    expression.textContent =
+        previousInput + " " + operator;
+}
+
+// Equal button
+function showResult() {
+    if (!operator || waitingForOperand) return;
+
+    const secondInput = parseFloat(currentInput);
+    const firstInput = parseFloat(previousInput);
+
+    const finalResult = calculate(
+        firstInput,
+        secondInput,
+        operator
+    );
+
+    expression.textContent =
+        previousInput + " " + operator + " " + currentInput + " =";
+
+    currentInput = finalResult === "Error"
+        ? "Error"
+        : String(Number(finalResult.toFixed(10)));
+
+    operator = null;
+    previousInput = "";
+    waitingForOperand = true;
+
+    updateDisplay();
+}
+
+// Clear all
+function clearCalculator() {
+    currentInput = "0";
+    previousInput = "";
+    operator = null;
+    waitingForOperand = false;
+
+    expression.textContent = "";
+    updateDisplay();
+}
+
+// Delete last digit
+function deleteDigit() {
+    if (waitingForOperand) return;
+
+    currentInput =
+        currentInput.length > 1
+            ? currentInput.slice(0, -1)
+            : "0";
+
+    if (currentInput === "-") currentInput = "0";
+
+    updateDisplay();
+}
+
+// Positive / Negative
+function changeSign() {
+    if (currentInput === "0" || currentInput === "Error") return;
+
+    currentInput = String(parseFloat(currentInput) * -1);
+    updateDisplay();
+}
+
+// Button click events
+buttons.forEach(button => {
+    button.addEventListener("click", () => {
+
+        if (button.dataset.number !== undefined) {
+            enterNumber(button.dataset.number);
+        }
+
+        if (button.dataset.operator) {
+            if (currentInput === "Error") return;
+            chooseOperator(button.dataset.operator);
+        }
+
+        const action = button.dataset.action;
+
+        if (action === "decimal") enterDecimal();
+        if (action === "equals") showResult();
+        if (action === "clear") clearCalculator();
+        if (action === "delete") deleteDigit();
+        if (action === "sign") changeSign();
+
+        if (action === "clear") {
+            expression.textContent = "";
+        }
     });
 });
 
-// Display selected image
-function showImage() {
-    const image = visibleItems[currentIndex].querySelector("img");
-    lightboxImg.src = image.src;
-    lightboxImg.alt = image.alt;
-}
+// Keyboard support
+document.addEventListener("keydown", event => {
+    const key = event.key;
 
-// Next image
-nextBtn.addEventListener("click", () => {
-    currentIndex = (currentIndex + 1) % visibleItems.length;
-    showImage();
-});
+    if (key >= "0" && key <= "9") {
+        enterNumber(key);
+    }
 
-// Previous image
-prevBtn.addEventListener("click", () => {
-    currentIndex =
-        (currentIndex - 1 + visibleItems.length) % visibleItems.length;
-    showImage();
-});
+    if (key === ".") {
+        enterDecimal();
+    }
 
-// Close lightbox
-function closeLightbox() {
-    lightbox.classList.remove("show");
-}
+    if (["+", "-", "*", "/", "%"].includes(key)) {
+        if (currentInput !== "Error") {
+            chooseOperator(key);
+        }
+    }
 
-closeBtn.addEventListener("click", closeLightbox);
+    if (key === "Enter" || key === "=") {
+        showResult();
+    }
 
-// Close when clicking outside image
-lightbox.addEventListener("click", (e) => {
-    if (e.target === lightbox) {
-        closeLightbox();
+    if (key === "Backspace") {
+        deleteDigit();
+    }
+
+    if (key === "Escape") {
+        clearCalculator();
     }
 });
 
-// Keyboard navigation
-document.addEventListener("keydown", (e) => {
-    if (!lightbox.classList.contains("show")) return;
-
-    if (e.key === "ArrowRight") nextBtn.click();
-    if (e.key === "ArrowLeft") prevBtn.click();
-    if (e.key === "Escape") closeLightbox();
-});
-
-// Image category filters
-filterButtons.forEach((button) => {
-    button.addEventListener("click", () => {
-
-        const category = button.dataset.filter;
-
-        filterButtons.forEach(btn =>
-            btn.classList.remove("active")
-        );
-
-        button.classList.add("active");
-
-        items.forEach((item) => {
-            if (
-                category === "all" ||
-                item.dataset.category === category
-            ) {
-                item.style.display = "block";
-            } else {
-                item.style.display = "none";
-            }
-        });
-    });
-});
+// Initial display
+updateDisplay();

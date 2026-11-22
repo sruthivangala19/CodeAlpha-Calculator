@@ -3,71 +3,58 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Image Gallery</title>
+
+    <title>My Calculator</title>
+
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <header>
-        <h1>My Image Gallery</h1>
-        <p>Explore the beauty through pictures</p>
-    </header>
+    <div class="calculator">
 
-    <nav class="filters">
-        <button class="active" data-filter="all">All</button>
-        <button data-filter="nature">Nature</button>
-        <button data-filter="city">City</button>
-        <button data-filter="animals">Animals</button>
-    </nav>
+        <h1>Calculator</h1>
 
-    <main class="gallery" id="gallery">
-
-        <div class="gallery-item" data-category="nature">
-            <img src="https://images.unsplash.com/photo-1470770841072-f978cf4d019e?w=800"
-                 alt="Beautiful mountain lake">
+        <!-- Display Screen -->
+        <div class="display">
+            <div id="expression"></div>
+            <input type="text" id="result" value="0" readonly>
         </div>
 
-        <div class="gallery-item" data-category="city">
-            <img src="https://images.unsplash.com/photo-1519501025264-65ba15a82390?w=800"
-                 alt="City skyline">
+        <!-- Calculator Buttons -->
+        <div class="buttons">
+
+            <button class="clear" data-action="clear">AC</button>
+            <button class="delete" data-action="delete">DEL</button>
+            <button class="operator" data-operator="%">%</button>
+            <button class="operator" data-operator="/">÷</button>
+
+            <button data-number="7">7</button>
+            <button data-number="8">8</button>
+            <button data-number="9">9</button>
+            <button class="operator" data-operator="*">×</button>
+
+            <button data-number="4">4</button>
+            <button data-number="5">5</button>
+            <button data-number="6">6</button>
+            <button class="operator" data-operator="-">−</button>
+
+            <button data-number="1">1</button>
+            <button data-number="2">2</button>
+            <button data-number="3">3</button>
+            <button class="operator" data-operator="+">+</button>
+
+            <button data-action="sign">+/-</button>
+            <button data-number="0">0</button>
+            <button data-action="decimal">.</button>
+            <button class="equal" data-action="equals">=</button>
+
         </div>
 
-        <div class="gallery-item" data-category="animals">
-            <img src="https://images.unsplash.com/photo-1474511320723-9a56873867b5?w=800"
-                 alt="Fox in nature">
-        </div>
+        <p class="footer">Created by Sruthi | CodeAlpha Internship</p>
 
-        <div class="gallery-item" data-category="nature">
-            <img src="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=800"
-                 alt="Green forest">
-        </div>
-
-        <div class="gallery-item" data-category="city">
-            <img src="https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?w=800"
-                 alt="London city">
-        </div>
-
-        <div class="gallery-item" data-category="animals">
-            <img src="https://images.unsplash.com/photo-1546182990-dffeafbe841d?w=800"
-                 alt="Lion">
-        </div>
-
-    </main>
-
-    <!-- Lightbox -->
-    <div class="lightbox" id="lightbox">
-        <button class="close" id="close">&times;</button>
-        <button class="prev" id="prev">&#10094;</button>
-
-        <img id="lightbox-img" src="" alt="Selected gallery image">
-
-        <button class="next" id="next">&#10095;</button>
     </div>
 
-    <footer>
-        <p>Created by Sruthi | CodeAlpha Internship</p>
-    </footer>
-
     <script src="script.js"></script>
+
 </body>
 </html>

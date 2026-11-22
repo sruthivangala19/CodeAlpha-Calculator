@@ -6,142 +6,113 @@
 
 body {
     font-family: Arial, sans-serif;
-    background: #f4f4f4;
-    color: #222;
-}
-
-header {
-    text-align: center;
-    padding: 40px 20px;
-    background: #20232a;
-    color: white;
-}
-
-header h1 {
-    font-size: 36px;
-    margin-bottom: 10px;
-}
-
-header p {
-    color: #ccc;
-}
-
-.filters {
-    text-align: center;
-    padding: 25px;
-}
-
-.filters button {
-    padding: 10px 20px;
-    margin: 5px;
-    border: none;
-    border-radius: 5px;
-    background: #ddd;
-    cursor: pointer;
-    transition: 0.3s;
-}
-
-.filters button:hover,
-.filters button.active {
-    background: #20232a;
-    color: white;
-}
-
-.gallery {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
-    padding: 20px 5%;
-}
-
-.gallery-item {
-    overflow: hidden;
-    border-radius: 10px;
-    cursor: pointer;
-}
-
-.gallery-item img {
-    width: 100%;
-    height: 250px;
-    object-fit: cover;
-    display: block;
-    transition: transform 0.4s;
-}
-
-.gallery-item:hover img {
-    transform: scale(1.1);
-}
-
-.lightbox {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.95);
+    background: linear-gradient(135deg, #141e30, #243b55);
+    min-height: 100vh;
+    display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 1000;
+    padding: 20px;
 }
 
-.lightbox.show {
-    display: flex;
+.calculator {
+    width: 350px;
+    background: #1e1e2f;
+    padding: 25px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
 }
 
-.lightbox img {
-    max-width: 75%;
-    max-height: 80vh;
-    object-fit: contain;
-    border-radius: 8px;
+h1 {
+    text-align: center;
+    color: white;
+    margin-bottom: 20px;
 }
 
-.lightbox button {
-    position: absolute;
+.display {
+    background: #111;
+    padding: 15px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    text-align: right;
+    min-height: 90px;
+}
+
+#expression {
+    color: #aaa;
+    font-size: 16px;
+    min-height: 22px;
+}
+
+#result {
+    width: 100%;
     background: transparent;
     border: none;
+    outline: none;
     color: white;
-    font-size: 35px;
+    font-size: 32px;
+    text-align: right;
+}
+
+.buttons {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+}
+
+button {
+    height: 60px;
+    border: none;
+    border-radius: 12px;
+    font-size: 20px;
+    background: #34344a;
+    color: white;
     cursor: pointer;
+    transition: 0.2s;
 }
 
-.close {
-    top: 20px;
-    right: 30px;
+button:hover {
+    background: #50506a;
+    transform: scale(1.05);
 }
 
-.prev {
-    left: 25px;
+button:active {
+    transform: scale(0.95);
 }
 
-.next {
-    right: 25px;
+.operator {
+    background: #ff9500;
 }
 
-footer {
+.operator:hover {
+    background: #e68a00;
+}
+
+.clear {
+    background: #e74c3c;
+}
+
+.delete {
+    background: #777;
+}
+
+.equal {
+    background: #27ae60;
+}
+
+.footer {
+    color: #aaa;
     text-align: center;
-    padding: 25px;
-    background: #20232a;
-    color: white;
+    font-size: 12px;
+    margin-top: 20px;
 }
 
-@media (max-width: 768px) {
-    .gallery {
-        grid-template-columns: repeat(2, 1fr);
+@media (max-width: 400px) {
+    .calculator {
+        width: 100%;
+        padding: 18px;
     }
 
-    header h1 {
-        font-size: 28px;
-    }
-}
-
-@media (max-width: 480px) {
-    .gallery {
-        grid-template-columns: 1fr;
-    }
-
-    .gallery-item img {
-        height: 230px;
-    }
-
-    .lightbox img {
-        max-width: 85%;
+    button {
+        height: 55px;
     }
 }
